@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# Set up a few common folders
+mkdir -p ~/gitroot
+mkdir -p ~/.config
+
+# first, get aptitude
+sudo apt-get install aptitude
+
+# Install some general tools that I use 
+sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd
+
+# Install development tools
+sudo aptitude install build-essential cmake cmake-curses-gui cmake-qt-gui meld valgrind
+
+# Install version control tools
+sudo aptitude install git gitg tig qgit
+git config --global user.name Rex Kerr
+
+# Install and configure the i3 Window Manager
+sudo aptitude install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu
+pushd ~/gitroot
+git clone https://github.com/rexkerr/i3config.git
+popd
+ln -s ~/gitroot/i3config/i3/ ~/.config/i3
+ln -s ~/gitroot/i3config/i3status/ ~/.config/i3status
+
+# Install and configure XMonad
+sudo aptitude install xmonad xmobar dmenu
+#
+# TODO
+#
+
+
+# Install and configure vim
+sudo aptitude install vim-gtk
+pushd ~/gitroot
+git clone https://github.com/rexkerr/vimrc.git
+popd
+ln -s ~/gitroot/vimrc/.vimrc ~/.vimrc
+ln -s ~/gitroot/vimrc/.gvimrc ~/.gvimrc
+
+
+# Install and configure Beyond Compare
+read -p "Download Beyond Compare to the Downloads folder, press enter to continue..."
+pushd ~/Downloads
+# wget https://www.scootersoftware.com/bcompare-4.1.9.21719_amd64.deb
+sudo dpkg --install bcompare*.deb
+rm bcompare*.deb
+popd
+git config --global diff.tool=bc3
+git config --global difftool.bc3=trustExitCode
+git config --global merge.tool=bc3
+git config --global mergetool.bc3=trustExitCode
+git config --global push.default=simple
+
+# Append my config to the end of .profile & .bashrc
+#
+# TODO
+#
+
+# Install & configure liquidprompt
+#
+# TODO
+#
+
+# Install & configure my various useful scripts
+#
+# TODO
+#
+
+
+echo =======================================
+echo      Now the manual stuff....
+echo =======================================
+echo
+echo Do not forget to :
+echo    git config --global user.email <THIS EMAIL>
+echo
+
