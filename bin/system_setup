@@ -8,7 +8,7 @@ mkdir -p ~/.config
 sudo apt-get install aptitude
 
 # Install some general tools that I use 
-sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd
+sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd vifm
 
 # Install development tools
 sudo aptitude install build-essential cmake cmake-curses-gui cmake-qt-gui meld valgrind
@@ -17,8 +17,8 @@ sudo aptitude install build-essential cmake cmake-curses-gui cmake-qt-gui meld v
 sudo aptitude install git gitg tig qgit
 git config --global user.name Rex Kerr
 
-# Install and configure the i3 Window Manager
-sudo aptitude install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu
+# Install and configure the i3 Window Manager & various tools my config file references
+sudo aptitude install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu scrot
 pushd ~/gitroot
 git clone https://github.com/rexkerr/i3config.git
 popd
