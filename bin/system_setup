@@ -8,7 +8,7 @@ mkdir -p ~/.config
 sudo apt-get install aptitude
 
 # Install some general tools that I use 
-sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd vifm
+sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd vifm xdotool
 
 # Install development tools
 sudo aptitude install build-essential cmake cmake-curses-gui cmake-qt-gui meld valgrind
