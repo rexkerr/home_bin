@@ -54,7 +54,7 @@ git config --global difftool.bc3=trustExitCode
 git config --global merge.tool=bc3
 git config --global mergetool.bc3=trustExitCode
 git config --global push.default=simple
-t
+
 # Get Qt pretty printers for gdb
 pushd ~/.gdb
 git clone git clone https://github.com/Lekensteyn/qt5printers.git
