@@ -57,7 +57,8 @@ fi
 if [[ $(task +TODAY or +TOMORROW or +OVERDUE count) -gt "0" ]]; then
     echo TODO LIST
     echo ===================================
-    $taskcommand due
+    $taskcommand +TODAY or +TOMORROW or +OVERDUE
     echo ===================================
     exit
 fi
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+NINJAROOT="./"
+
+while [ ! -f "$NINJAROOT/build.ninja" ]; do
+    NINJAROOT+="../"
+
+    if [ -d "$NINJAROOT/root" ]; then
+        echo Unable to find build.ninja file
+        exit
+    fi
+done
+
+BUILD_SUBFOLDER="$(python -c "import os.path, sys; print os.path.relpath('$PWD', '$NINJAROOT')")"
+
+ninja -C "$NINJAROOT"
+
