@@ -5,13 +5,14 @@ NINJAROOT="./"
 while [ ! -f "$NINJAROOT/build.ninja" ]; do
     NINJAROOT+="../"
 
+    # If we've hit the / folder (assumed by the presence of a /root folder,
+    # which I optimistically assume won't exist elsewhere, at least in a Ninja
+    # build folder), then stop searching...
     if [ -d "$NINJAROOT/root" ]; then
         echo Unable to find build.ninja file
         exit
     fi
 done
-
-BUILD_SUBFOLDER="$(python -c "import os.path, sys; print os.path.relpath('$PWD', '$NINJAROOT')")"
 
 ninja -C "$NINJAROOT"
 
