@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xdotool key F10 Right Right Right Right Down Right Return
