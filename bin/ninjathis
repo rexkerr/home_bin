@@ -16,5 +16,5 @@ done
 
 BUILD_SUBFOLDER="$(python -c "import os.path, sys; print os.path.relpath('$PWD', '$NINJAROOT')")"
 
-ninja -C "$NINJAROOT" "$BUILD_SUBFOLDER"/all
+ninja -C "$NINJAROOT" "$BUILD_SUBFOLDER"/all "$@"
 

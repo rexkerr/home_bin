@@ -14,5 +14,5 @@ while [ ! -f "$NINJAROOT/build.ninja" ]; do
     fi
 done
 
-ninja -C "$NINJAROOT"
+ninja -C "$NINJAROOT" "$@"
 
