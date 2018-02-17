@@ -41,6 +41,20 @@ popd
 ln -s ~/gitroot/vimrc/.vimrc ~/.vimrc
 ln -s ~/gitroot/vimrc/.gvimrc ~/.gvimrc
 
+# Download vim plugins that I use
+
+mkdir ~/.vim/bundle
+pushd ~/.vim/bundle
+git clone git://github.com/tpope/vim-abolish.git
+git clone git://github.com/vim-scripts/Align.git 
+git clone https://github.com/kien/ctrlp.vim.git
+git clone git://github.com/tpope/vim-vinegar.git
+popd
+
+
+# Create empty default project config for vim
+mkdir -p ~/.vimprojects
+touch ~/.vimprojects/default.vim
 
 # Install and configure Beyond Compare
 read -p "Download Beyond Compare to the Downloads folder, press enter to continue..."
