@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# This really should probaby just be a bash function, but I don't currently
+# have a way to manage those (something I should do soon!), so for now I just
+# run this like this:
+#
+#  $ . cdpr
+
+
+GITTOPLEVEL=`git rev-parse --show-toplevel 2> /dev/null`
+if [ $? -eq 0 ]; then
+    echo "$GITTOPLEVEL"
+    cd "$GITTOPLEVEL"
+else
+    echo "This doesn't appear to be a git folder..."
+fi
