@@ -1,0 +1,4 @@
+FILENAME="`ls | head -$1 | tail -1`"
+echo Opening:  $FILENAME
+xdg-open "$FILENAME"
+
