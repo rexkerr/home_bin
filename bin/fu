@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+echo Checking usage of folder "$1"
+
+SIZE=$(find "$1" -type f -print0 | xargs -0 stat -c %s | paste -sd+ | bc)
+
+echo $SIZE bytes [$(echo $SIZE | numfmt --to=iec-i)]
+

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+SIZE=$(ls $1 | xargs stat -c %s | paste -sd+ | bc)
+echo $SIZE bytes [ $(echo $SIZE | numfmt --to=iec-i) ]
+
