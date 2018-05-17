@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
-SIZE=$(ls $1 | xargs stat -c %s | paste -sd+ | bc)
+#
+# gu : "glob usage" -- prints the usage of a given glob
+#
+#  Usage:  gu <some ls options, like -R> <file pattern>
+#
+#
+SIZE=$(ls -lAk $@ | awk '{ s+= $5 } END { print s }')
 echo $SIZE bytes [ $(echo $SIZE | numfmt --to=iec-i) ]
 
