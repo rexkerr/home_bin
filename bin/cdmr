@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# cd to make root
+#
+# This really should probaby just be a bash function, but I don't currently
+# have a way to manage those (something I should do soon!), so for now I just
+# run this like this:
+#
+#  $ . cdmr
+
+MAKEROOT="./"
+
+while [ ! -f "$MAKEROOT/CMakeCache.txt" ]; do
+    MAKEROOT+="../"
+
+    # If we've hit the / folder (assumed by the presence of a /root folder,
+    # which I optimistically assume won't exist elsewhere, at least in a Ninja
+    # build folder), then stop searching...
+    if [ -d "$MAKEROOT/root" ]; then
+        echo Unable to find CMakeCache.txt file
+        exit
+    fi
+done
+
+cd "$NINJAROOT"
+

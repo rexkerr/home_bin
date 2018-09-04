@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+MAKEROOT="./"
+
+while [ ! -f "$MAKEROOT/CMakeCache.txt" ]; do
+    MAKEROOT+="../"
+
+    # If we've hit the / folder (assumed by the presence of a /root folder,
+    # which I optimistically assume won't exist elsewhere, at least in a Ninja
+    # build folder), then stop searching...
+    if [ -d "$MAKEROOT/root" ]; then
+        echo Unable to find CMakeCache.txt file
+        exit
+    fi
+done
+
+make -j4 -C "$MAKEROOT" "$@"
+
