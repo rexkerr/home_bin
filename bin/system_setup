@@ -26,6 +26,10 @@ popd
 ln -s ~/gitroot/i3config/i3/ ~/.config/i3
 ln -s ~/gitroot/i3config/i3status/ ~/.config/i3status
 
+# Fix folder handling .desktop file for Nautilus
+cp /usr/share/applications/nautilus-folder-handler.desktop ~/.local/share/applications/
+sed -i ~/.local/share/applications/nautilus-folder-handler.desktop -e "s/--new-window/& --no-desktop/"
+
 # Install and configure XMonad
 sudo aptitude install xmonad xmobar dmenu
 #
@@ -88,6 +92,10 @@ end
 #
 # TODO
 #
+
+# Set up my .inputrc
+#
+echo "set editing-mode vi" >> ~/.inputrc
 
 # Install & configure liquidprompt
 #
