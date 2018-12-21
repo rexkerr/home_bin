@@ -1,4 +1,4 @@
 #/usr/bin/env bash
-grep -e "Finishing wakeup\|Suspending system" /var/log/syslog.2
-grep -e "Finishing wakeup\|Suspending system" /var/log/syslog.1
-grep -e "Finishing wakeup\|Suspending system" /var/log/syslog 
+grep -e "waking up\|Finishing wakeup\|Suspending system" /var/log/syslog.2
+grep -e "waking up\|Finishing wakeup\|Suspending system" /var/log/syslog.1
+grep -e "waking up\|Finishing wakeup\|Suspending system" /var/log/syslog 
