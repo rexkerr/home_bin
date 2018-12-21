@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+TEST_EXEC=$1
+TEST_NUM=$2
+
+Usage() {
+    echo ""
+    echo "$(basename $0) <TestExec> <TestNum>"
+    exit 0
+}
+
+
+if [ ! -e $1 ]; then
+    echo "The test executable does not exist:  $TEST_EXEC"
+    Usage
+fi
+
+IS_NUMBER='^[0-9]+$'
+if ! [[ $TEST_NUM =~ $IS_NUMBER ]] ; then
+    # invalid, so next block will show the valid range
+    TEST_NUM=0
+fi
+
+NUM_TESTS=$($TEST_EXEC --gtest_list_tests | grep -e "^ .*" | sed -e 's/\s*//g' | wc -l)
+
+if [ $TEST_NUM -lt 1 ] || [ $TEST_NUM -gt $NUM_TESTS ]; then
+    echo "Test number must be between 1 and $NUM_TESTS"
+    Usage
+fi
+
+TEST_NAME=$($TEST_EXEC --gtest_list_tests | grep -e "^ .*" | sed -e 's/\s*//g' | head -$TEST_NUM | tail -1)
+
+$TEST_EXEC --gtest_filter="*$TEST_NAME*"
+
+
+
