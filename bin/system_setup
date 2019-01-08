@@ -97,6 +97,7 @@ end
 # Set up my .inputrc
 #
 echo "set editing-mode vi" >> ~/.inputrc
+echo "set show-mode-in-prompt on" >> ~/.inputrc
 
 # Install & configure liquidprompt
 #
