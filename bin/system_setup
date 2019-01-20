@@ -5,21 +5,55 @@ mkdir -p ~/gitroot
 mkdir -p ~/.config
 mkdir -p ~/.gdb
 
-# first, get aptitude
-sudo apt-get install aptitude
-
-# Install some general tools that I use 
-sudo aptitude install acpi caffeine bzip2 eject exuberant-ctags firefox gimp tmux tree zeal xclip keepassx gnome-terminal taskwarrior imagemagick screen mplayer wget curl passwd vifm xdotool acpi
+# Install some general tools that I use
+sudo apt install    \
+    acpi            \
+    apcalc          \
+    aptitude        \
+    bzip2           \
+    caffeine        \
+    curl            \
+    eject           \
+    exuberant-ctags \
+    firefox         \
+    gimp            \
+    gnome-terminal  \
+    imagemagick     \
+    keepassx        \
+    mplayer         \
+    passwd          \
+    screen          \
+    taskwarrior     \
+    tmux            \
+    tree            \
+    vifm            \
+    wget            \
+    xclip           \
+    xdotool         \
+    zeal
 
 # Install development tools
-sudo aptitude install build-essential cmake cmake-curses-gui cmake-qt-gui meld valgrind
+sudo apt install     \
+    build-essential  \
+    cmake            \
+    cmake-curses-gui \
+    cmake-qt-gui     \
+    meld             \
+    valgrind
 
-# Install version control tools
-sudo aptitude install git gitg tig qgit
+# Install and configure version control tools
+sudo apt install \
+    git          \ 
+    gitg         \ 
+    qgit         \
+    tig   
+
 git config --global user.name Rex Kerr
+read -p "What is your git email address?  " GIT_EMAIL_INPUT
+git config --global user.email $GIT_EMAIL_INPUT
 
 # Install and configure the i3 Window Manager & various tools my config file references
-sudo aptitude install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu scrot
+sudo apt install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu scrot
 pushd ~/gitroot
 git clone https://github.com/rexkerr/i3config.git
 popd
@@ -32,14 +66,14 @@ cp /usr/share/applications/nautilus.desktop ~/.local/share/applications/
 sed -i ~/.local/share/applications/nautilus*.desktop -e "s/--new-window/& --no-desktop/"
 
 # Install and configure XMonad
-sudo aptitude install xmonad xmobar dmenu
+sudo apt install xmonad xmobar dmenu
 #
 # TODO
 #
 
 
 # Install and configure vim
-sudo aptitude install vim-gtk
+sudo apt install vim-gtk
 pushd ~/gitroot
 git clone https://github.com/rexkerr/vimrc.git
 popd
@@ -47,11 +81,10 @@ ln -s ~/gitroot/vimrc/.vimrc ~/.vimrc
 ln -s ~/gitroot/vimrc/.gvimrc ~/.gvimrc
 
 # Download vim plugins that I use
-
 mkdir ~/.vim/bundle
 pushd ~/.vim/bundle
 git clone git://github.com/tpope/vim-abolish.git
-git clone git://github.com/vim-scripts/Align.git 
+git clone git://github.com/vim-scripts/Align.git
 git clone https://github.com/kien/ctrlp.vim.git
 git clone git://github.com/tpope/vim-vinegar.git
 popd
@@ -64,7 +97,7 @@ touch ~/.vimprojects/default.vim
 # Install and configure Beyond Compare
 read -p "Download Beyond Compare to the Downloads folder, press enter to continue..."
 pushd ~/Downloads
-# wget https://www.scootersoftware.com/bcompare-4.1.9.21719_amd64.deb
+wget http://www.scootersoftware.com/bcompare-4.2.9.23626_amd64.deb
 sudo dpkg --install bcompare*.deb
 rm bcompare*.deb
 popd
@@ -79,14 +112,65 @@ pushd ~/.gdb
 git clone git clone https://github.com/Lekensteyn/qt5printers.git
 popd
 
-echo "
+echo >> ~/.gdbinput2 <<GDBINIT
 python
-import sys, os.path
+import sys, os.path, gdb
+
 sys.path.insert(0, os.path.expanduser('~/.gdb'))
 import qt5printers
 qt5printers.register_printers(gdb.current_objfile())
+
+sys.path.insert(0, os.path.expanduser('~/.gdb/python'))
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (gdb.current_objfile())
 end
-" >> ~/.gdbinit
+
+define connect
+    target remote localhost:12345
+end
+
+
+python
+class ListGTests(gdb.Command):
+  """ Lists all Google Test functions """
+
+  def __init__ (self):
+    super(ListGTests, self).__init__("listgtests", gdb.COMMAND_USER)
+
+  def invoke (self, name, from_tty):
+    print( name)
+    gdb.execute('info func TestBody')
+
+ListGTests()
+
+class GTBreakpoint(gdb.Command):
+  """ Creates breakpoints in test bodies of Google Test functions matching regex """
+
+  def __init__ (self):
+    super(GTBreakpoint, self).__init__("breakgtest", gdb.COMMAND_USER)
+
+  def invoke (self, name, from_tty):
+    if not name:
+       print("usage:  breakgtest <testname regex>")
+       return
+
+    regexp = "%s.*TestBody" % name
+    gdb.execute('rbreak {:s}'.format(regexp))
+
+GTBreakpoint()
+end
+
+alias bgt=breakgtest
+alias lgt=listgtests
+
+set print thread-events off
+
+skip QString::~QString
+skip EventLogger::GetInstance()
+
+tui enable
+
+GDBINIT
 
 
 # Append my config to the end of .profile & .bashrc
@@ -96,8 +180,10 @@ end
 
 # Set up my .inputrc
 #
-echo "set editing-mode vi" >> ~/.inputrc
-echo "set show-mode-in-prompt on" >> ~/.inputrc
+cat >> ~/.inputrc <<INPUTRC
+set editing-mode vi
+set show-mode-in-prompt on
+INPUTRC
 
 # Install & configure liquidprompt
 #
@@ -108,13 +194,4 @@ echo "set show-mode-in-prompt on" >> ~/.inputrc
 #
 # TODO
 #
-
-
-echo =======================================
-echo      Now the manual stuff....
-echo =======================================
-echo
-echo Do not forget to :
-echo    git config --global user.email <THIS EMAIL>
-echo
 

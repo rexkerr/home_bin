@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+import subprocess
+import sys
+
+internal_monitor = "DP-2"
+
+def connected_monitors():
+    output = [l for l in subprocess.check_output(["xrandr"]).decode("utf-8").splitlines()]
+    return [l.split()[0] for l in output if " connected " in l]
+
+def disconnected_monitors():
+    output = [l for l in subprocess.check_output(["xrandr"]).decode("utf-8").splitlines()]
+    return [l.split()[0] for l in output if " disconnected " in l]
+
+def set_monitors(on, off, is1080):
+    command = ["xrandr"]
+    for m in on:
+        command.append("--output")
+        command.append(m)
+        if m == on[0]:
+            command.append("--primary")
+        if is1080:
+            command.append("--mode")
+            command.append("1920x1080")
+        else:
+            command.append("--auto")
+
+    for m in off:
+        command.append("--output")
+        command.append(m)
+        command.append("--off")
+
+    # print("Command:  " + " ".join(command))
+    subprocess.call(command)
+
+# first turn off any disconnected monitors
+set_monitors([], disconnected_monitors(), False)
+
+allmonitors = connected_monitors()
+external_monitors = [m for m in allmonitors if m != internal_monitor]
+desired_monitor = sys.argv[1] if (len(sys.argv) > 1) else ""
+
+is1080 = (sys.argv[2] == "1080") if (len(sys.argv) > 2) else False
+
+if internal_monitor not in allmonitors:
+    print("The internal_monitor variable needs to be updated")
+    input("    ... press ENTER to continue...")
+    sys.exit()
+
+if desired_monitor in ("both", "all", "b", "a"):
+    set_monitors(allmonitors, [], is1080)
+
+elif desired_monitor in ("int", "internal", "i"):
+    set_monitors([internal_monitor], external_monitors, is1080)
+
+elif desired_monitor in ("ext", "external", "e"):
+    if not external_monitors:
+        print("There is no external monitor connected.")
+        input("    ... press ENTER to continue...")
+        sys.exit()
+
+    set_monitors(external_monitors, [internal_monitor], is1080)
+
+else:
+    print("Unknown monitor requested")
+    print("")
+    print("Usage:")
+    print("   " + sys.argv[0] +" [type]")
+    print("")
+    input("    ... press ENTER to continue...")
+
