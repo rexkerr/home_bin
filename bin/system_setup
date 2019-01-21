@@ -22,6 +22,7 @@ sudo apt install    \
     keepassx        \
     mplayer         \
     passwd          \
+    pass            \
     screen          \
     taskwarrior     \
     tmux            \
@@ -51,6 +52,7 @@ sudo apt install \
 git config --global user.name Rex Kerr
 read -p "What is your git email address?  " GIT_EMAIL_INPUT
 git config --global user.email $GIT_EMAIL_INPUT
+git config --global diff.gpg.textconv "gpg --no-tty --decrypt"  # for pass
 
 # Install and configure the i3 Window Manager & various tools my config file references
 sudo apt install i3 i3-wm i3lock xbacklight xautolock suckless-tools dmenu scrot
