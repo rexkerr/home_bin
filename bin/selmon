@@ -12,13 +12,22 @@ def disconnected_monitors():
     output = [l for l in subprocess.check_output(["xrandr"]).decode("utf-8").splitlines()]
     return [l.split()[0] for l in output if " disconnected " in l]
 
-def set_monitors(on, off, is1080):
+def set_monitors(on, off, is1080, side=None):
     command = ["xrandr"]
     for m in on:
         command.append("--output")
         command.append(m)
         if m == on[0]:
             command.append("--primary")
+
+        if m != internal_monitor:
+            if side in ("left", "l"):
+                command.append("--left-of")
+                command.append(internal_monitor)
+            elif side in ("right", "r"):
+                command.append("--right-of")
+                command.append(internal_monitor)
+
         if is1080:
             command.append("--mode")
             command.append("1920x1080")
@@ -30,7 +39,7 @@ def set_monitors(on, off, is1080):
         command.append(m)
         command.append("--off")
 
-    # print("Command:  " + " ".join(command))
+    print("Command:  " + " ".join(command))
     subprocess.call(command)
 
 # first turn off any disconnected monitors
@@ -47,8 +56,18 @@ if internal_monitor not in allmonitors:
     input("    ... press ENTER to continue...")
     sys.exit()
 
-if desired_monitor in ("both", "all", "b", "a"):
+if desired_monitor in ("both", "all", "b", "a", "mirror", "m"):
+    # force to 1080 since the internal monitor is 1080
+    is1080 = True 
+
+    # first disable external monitors to clear any left-of or right-of settings
+    set_monitors([internal_monitor], external_monitors, is1080)
+
+    # now select all monitors
     set_monitors(allmonitors, [], is1080)
+
+elif desired_monitor in ("left", "l", "right", "r"):
+    set_monitors(allmonitors, [], is1080, desired_monitor)
 
 elif desired_monitor in ("int", "internal", "i"):
     set_monitors([internal_monitor], external_monitors, is1080)
