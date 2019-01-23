@@ -21,8 +21,9 @@ sudo apt install    \
     imagemagick     \
     keepassx        \
     mplayer         \
-    passwd          \
     pass            \
+    passwd          \
+    pasystray       \
     screen          \
     taskwarrior     \
     tmux            \
