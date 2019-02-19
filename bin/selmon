@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
+import enum
 import subprocess
 import sys
 
 internal_monitor = "DP-2"
+
+class Resolution(enum.Enum):
+    isNative = 0
+    is720 = 1
+    is1080 = 2
 
 def connected_monitors():
     output = [l for l in subprocess.check_output(["xrandr"]).decode("utf-8").splitlines()]
@@ -12,7 +18,7 @@ def disconnected_monitors():
     output = [l for l in subprocess.check_output(["xrandr"]).decode("utf-8").splitlines()]
     return [l.split()[0] for l in output if " disconnected " in l]
 
-def set_monitors(on, off, is1080, side=None):
+def set_monitors(on, off, resolution, side=None):
     command = ["xrandr"]
     for m in on:
         command.append("--output")
@@ -28,7 +34,10 @@ def set_monitors(on, off, is1080, side=None):
                 command.append("--right-of")
                 command.append(internal_monitor)
 
-        if is1080:
+        if resolution == Resolution.is720:
+            command.append("--mode")
+            command.append("1280x720")
+        elif resolution == Resolution.is1080:
             command.append("--mode")
             command.append("1920x1080")
         else:
@@ -49,7 +58,11 @@ allmonitors = connected_monitors()
 external_monitors = [m for m in allmonitors if m != internal_monitor]
 desired_monitor = sys.argv[1] if (len(sys.argv) > 1) else ""
 
-is1080 = (sys.argv[2] == "1080") if (len(sys.argv) > 2) else False
+resolution = Resolution.isNative
+
+if(len(sys.argv) > 2):
+    if (sys.argv[2] == "720"): resolution = Resolution.is720
+    elif (sys.argv[2] == "1080"): resolution = Resolution.is1080
 
 if internal_monitor not in allmonitors:
     print("The internal_monitor variable needs to be updated")
@@ -58,19 +71,19 @@ if internal_monitor not in allmonitors:
 
 if desired_monitor in ("both", "all", "b", "a", "mirror", "m"):
     # force to 1080 since the internal monitor is 1080
-    is1080 = True 
+    resolution = Resolution.is1080
 
     # first disable external monitors to clear any left-of or right-of settings
-    set_monitors([internal_monitor], external_monitors, is1080)
+    set_monitors([internal_monitor], external_monitors, resolution)
 
     # now select all monitors
-    set_monitors(allmonitors, [], is1080)
+    set_monitors(allmonitors, [], resolution)
 
 elif desired_monitor in ("left", "l", "right", "r"):
-    set_monitors(allmonitors, [], is1080, desired_monitor)
+    set_monitors(allmonitors, [], resolution, desired_monitor)
 
 elif desired_monitor in ("int", "internal", "i"):
-    set_monitors([internal_monitor], external_monitors, is1080)
+    set_monitors([internal_monitor], external_monitors, resolution)
 
 elif desired_monitor in ("ext", "external", "e"):
     if not external_monitors:
@@ -78,7 +91,7 @@ elif desired_monitor in ("ext", "external", "e"):
         input("    ... press ENTER to continue...")
         sys.exit()
 
-    set_monitors(external_monitors, [internal_monitor], is1080)
+    set_monitors(external_monitors, [internal_monitor], resolution)
 
 else:
     print("Unknown monitor requested")
