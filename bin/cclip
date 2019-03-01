@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Put things into the clipboard from the command line.  xclip is a great
+# utility, but it defaults to the selection buffer, and some programs work
+# better with the clipboard.
+#
+# Example usage:
+#
+#    ls | cclip
+# 
+#    cclip <somefile>
+#
+
+
+[ $# -ge 1 -a -f "$1" ] && INPUT="$1" || INPUT="-"
+cat $INPUT | xclip -selection clipboard
+
