@@ -1,6 +1,21 @@
 #!/usr/bin/env bash 
 
 # This script is for cherry-picking between branches when files have moved
+#
+# Usage:
+#     patch_pick SOURCE_SHA FILE_IN_SOURCE_BRANCH [TARGET_FILE]
+#
+#            If no TARGET_FILE specified, it's assumed that the path is the
+#            same as the source branch.  Either way, if the target file cannot
+#            be found, an attempt to find a file with the given name will be made.
+#
+#  If the merge fails, any hunks that could not be applied will be saved in a
+#  TARGET_FILE.rej file to be manually applied.
+# 
+#  I generaly get a list of files that were changed in the source commit, as follows:
+#
+#      git show --name-only SHA
+#
 
 SHA=$1
 ORIGFILE=$2

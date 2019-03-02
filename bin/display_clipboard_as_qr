@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+MAX_ENCODE=2500
+CLIPBOARD=$(xclip -selection clipboard -o)
+CLIPLEN=$(echo -n "$CLIPBOARD" | wc -c)
+
+if [ $CLIPLEN -gt $MAX_ENCODE ]; then
+    notify-send WARNING "Clipboard length was truncated during encoding, $MAX_ENCODE of $CLIPLEN bytes used."
+fi
+
+qrencode -m 10 "`echo -n "$CLIPBOARD" | head -c $MAX_ENCODE`" -o - | convert  -scale 1000 - - | display -
+
+if [ $? -ne 0 ]; then
+    notify-send ERROR "Still could not encode clipboard; data too long?"
+fi
