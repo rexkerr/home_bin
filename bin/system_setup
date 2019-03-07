@@ -161,10 +161,26 @@ class GTBreakpoint(gdb.Command):
     gdb.execute('rbreak {:s}'.format(regexp))
 
 GTBreakpoint()
+
+class GTRunner(gdb.Command):
+  """ Runs unit tests, filtered to tests that contains the testname"""
+
+  def __init__ (self):
+    super(GTRunner, self).__init__("rungtest", gdb.COMMAND_USER)
+
+  def invoke (self, name, from_tty):
+    if not name:
+       print("usage:  rungtest <testname>")
+       return
+
+    gdb.execute('r --gtest_filter="*{:s}*"'.format(name))
+
+GTRunner()
 end
 
 alias bgt=breakgtest
 alias lgt=listgtests
+alias rgt=rungtest
 
 set print thread-events off
 
