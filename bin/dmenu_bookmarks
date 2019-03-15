@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -e 
+
+case "$1" in
+  "list")
+    data=$(sed '0,/^__BOOKMARKS__$/d' "$0")
+    sed -e "s/!.*//" <<< "$data"
+    ;;
+  "run")
+    input=$(tee)
+    if [ ! -z "$input" ]; then
+        if [[ "$input" == "EDIT BOOKMARKS" ]]; then
+            gvim $0
+            exit
+        fi
+        $(sed -e "s/^${input}!//;t;d" "$0")
+    fi
+    ;;
+  "")
+    bash "$0" list | dmenu -i -p 'Bookmark: ' | bash "$0" run
+    ;;
+esac
+
+exit
+
+__BOOKMARKS__
+Mail!google-chrome-stable --app=https://outlook.office.com/mail/inbox/
+Calendar!google-chrome-stable --app=https://outlook.office.com/calendar
+DICOM Browser!xdg-open https://dicom.innolitics.com/ciods
+EDIT BOOKMARKS
