@@ -5,7 +5,7 @@ set -e
 case "$1" in
   "list")
     data=$(sed '0,/^__BOOKMARKS__$/d' "$0")
-    sed -e "s/!.*//" <<< "$data"
+    sed -e "s/!.*//" <<< "$data" | grep -v "^\s*#"
     ;;
   "run")
     input=$(tee)
@@ -28,4 +28,5 @@ __BOOKMARKS__
 Mail!google-chrome-stable --app=https://outlook.office.com/mail/inbox/
 Calendar!google-chrome-stable --app=https://outlook.office.com/calendar
 DICOM Browser!xdg-open https://dicom.innolitics.com/ciods
+# You can add comments now too
 EDIT BOOKMARKS
