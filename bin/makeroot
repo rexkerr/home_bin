@@ -14,5 +14,5 @@ while [ ! -f "$MAKEROOT/CMakeCache.txt" ]; do
     fi
 done
 
-make -j4 -C "$MAKEROOT" "$@"
+make -j$(nproc --all) -C "$MAKEROOT" "$@"
 
