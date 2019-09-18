@@ -9,5 +9,5 @@
 
 BATTINFO=`acpi -b | tail -1`
 if [[ `echo $BATTINFO | grep Discharging` && `echo $BATTINFO | cut -f 5 -d " "` < 00:15:00 ]] ; then
-    DISPLAY=:0.0 /usr/bin/notify-send "low battery" "$BATTINFO"
+    DISPLAY=:0.0 /usr/bin/notify-send -h string:bgcolor:#FF0000  "low battery" "$BATTINFO"
 fi

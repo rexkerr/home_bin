@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+while [[ true ]]; do 
+    # WAIT=$(python -c "import random;print int(random.random() * 10 + 5)")
+    WAIT=$(shuf -i 10-15 -n1)
+
+    echo "Will remind again in $WAIT minutes"
+    sleep ${WAIT}m
+
+
+    MSG=$(shuf -i 1-6 -n1)
+
+    case $MSG in
+        1) notify-send "POSTURE REMINDER" "Hey, stop slouching!";;
+        2) notify-send "POSTURE REMINDER" "Sit up straight!";;
+        3) notify-send "POSTURE REMINDER" "Are you still hunched over?";;
+        4) notify-send "POSTURE REMINDER" "Caught you, again.";;
+        5) notify-send "POSTURE REMINDER" " ? : this is your back on slack....";;
+        6) notify-send "POSTURE REMINDER" "How many times do I have to tell you?";;
+    esac
+ done

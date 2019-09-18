@@ -8,8 +8,12 @@ if [ $1 -gt 100 ]; then
     exit
 fi
 
-MAX_BRIGHT=852
+FOLDER=/sys/class/backlight/nvidia_0
+
+# MAX_BRIGHT=852
+MAX_BRIGHT=`cat ${FOLDER}/max_brightness`
 VALUE=$(($1*$MAX_BRIGHT/100))
 echo Setting brightness to $1%, or $VALUE of $MAX_BRIGHT
-sudo tee /sys/class/backlight/intel_backlight/brightness <<< $VALUE > /dev/null
-
+echo "Brightness was:  `cat ${FOLDER}/actual_brightness`"
+sudo tee ${FOLDER}/brightness <<< $VALUE > /dev/null
+echo "Brightness is:  `cat ${FOLDER}/actual_brightness`"

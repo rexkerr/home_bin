@@ -12,9 +12,9 @@ findexpr() {
     find . -iname "$2" -type f -print0 | xargs -0 grep -Hine "$1"; 
 }
 
-bd() {
+cdN() {
     #
-    # "back directory", cd up N directories
+    # cd up N directories
     #
 
     if [[ $# -eq 0 ]]; then
@@ -37,21 +37,22 @@ cdbr() {
     # cd to the "build root"
     #
 
-    local MAKEROOT="./"
+    local CMAKEROOT="./"
 
-    while [ ! -f "$MAKEROOT/CMakeCache.txt" ] && [ ! -f "$MAKEROOT/build.ninja" ]; do
-        MAKEROOT+="../"
+    while [ ! -f "$CMAKEROOT/CMakeCache.txt" ] && [ ! -f "$CMAKEROOT/build.ninja" ]; do
+        CMAKEROOT+="../"
 
-        # If we've hit the / folder (assumed by the presence of a /root folder,
-        # which I optimistically assume won't exist elsewhere, at least in a Ninja
-        # build folder), then stop searching...
-        if [ -d "$MAKEROOT/root" ]; then
+        if [ "$(readlink -f "$CMAKEROOT")" == "/" ]; then
             echo Unable to find CMakeCache.txt or build.ninja file
             return
         fi
     done
 
-    cd "$MAKEROOT"
+    cd "$CMAKEROOT"
+
+    if [ $# == 1 ]; then
+        cd $1
+    fi
 }
 
 cdpr() {
@@ -67,9 +68,14 @@ cdpr() {
     else
         echo "This doesn't appear to be a git folder..."
     fi
+
+    if [ $# == 1 ]; then
+        cd $1
+    fi
 }
 
 mkcd() {
     mkdir $1
     cd $1
 }
+

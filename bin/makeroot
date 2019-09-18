@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
 
-MAKEROOT="./"
+CMAKEROOT="./"
 
-while [ ! -f "$MAKEROOT/CMakeCache.txt" ]; do
-    MAKEROOT+="../"
+while [ ! -f "$CMAKEROOT/CMakeCache.txt" ]; do
+    CMAKEROOT+="../"
 
-    # If we've hit the / folder (assumed by the presence of a /root folder,
-    # which I optimistically assume won't exist elsewhere, at least in a Ninja
-    # build folder), then stop searching...
-    if [ -d "$MAKEROOT/root" ]; then
+    if [ "$(readlink -f "$CMAKEROOT")" == "/" ]; then
         echo Unable to find CMakeCache.txt file
         exit
     fi
 done
 
-make -j$(nproc --all) -C "$MAKEROOT" "$@"
+cmake --build "$CMAKEROOT" -- -j $(nproc --all) $@
 
