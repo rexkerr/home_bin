@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-xdotool key F10 Right Right Right Right Down Right Down Return
+# xdotool key F10 Right Right Right Right Down Right Down Return
+kitty +kitten themes --reload-in=all Atom\ One\ Light

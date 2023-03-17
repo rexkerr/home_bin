@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
 while [[ true ]]; do 
+
     # WAIT=$(python -c "import random;print int(random.random() * 10 + 5)")
     WAIT=$(shuf -i 10-15 -n1)
 
     echo "Will remind again in $WAIT minutes"
     sleep ${WAIT}m
 
+    pgrep zoom\|ringcentral 2>&1 > /dev/null
+    if [ $? -eq  0 ]; then
+        continue 
+    fi
 
     MSG=$(shuf -i 1-6 -n1)
 

@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 
+gcc --version | grep 8.3.0 > /dev/null
+
+if  [[ $? -ne 0 ]]; then
+    echo "Wrong gcc version..."
+    exit 1
+fi
+
+
 CMAKEROOT="./"
 
 while [ ! -f "$CMAKEROOT/CMakeCache.txt" ]; do
+
+    if [ -d "$CMAKEROOT/.git" ]; then
+        echo Found .git folder, building from sibling debug folder
+        CMAKEROOT+="../debug"
+        continue
+    fi
+
     CMAKEROOT+="../"
 
     if [ "$(readlink -f "$CMAKEROOT")" == "/" ]; then
         echo Unable to find CMakeCache.txt file
-        exit
+        exit 1
     fi
 done
 

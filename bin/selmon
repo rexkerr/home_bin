@@ -8,7 +8,7 @@ INFO = ("[ \033[30;1mINFO\033[0m ] ", "INFO")
 WARNING = ("[ \033[33;1mWARNING\033[0m ] ", "WARNING")
 ERROR = ("[ \033[31;1mERROR\033[0m ] ", "ERROR")
 
-internal_monitor = "DP-2"
+internal_monitor = "eDP-1-1"
 
 class Resolution(enum.Enum):
     isNative = 0

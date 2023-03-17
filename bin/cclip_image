@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Put things into the clipboard from the command line.  xclip is a great
+# utility, but it defaults to the selection buffer, and some programs work
+# better with the clipboard.
+#
+# Example usage:
+#
+#    ls | cclip
+# 
+#    cclip <somefile>
+#
+
+if [ -t 0 ]; then
+    if [ -e "$1" ]; then
+        xclip -selection clipboard -t $(file --mime-type -b "$1") "$1"
+    else
+cat << EOF
+ERROR:  You must specify a valid file to copy, or pipe something to this script
+
+   Example Usages:
+        $(basename $0) <filename>
+        someprogram | $(basename $0)
+        someprogram | $(basename $0) image/png
+EOF
+    fi
+else
+    # runing from pipe
+    if [[ ($# != 1) ]]; then
+        echo "...assuming plain text, you can also specify the mime type when piping with:  $(basename $0) <mime/type>"
+        DATA_TYPE="text/plain"
+    else
+        DATA_TYPE="$1"
+    fi
+
+    cat - | xclip  -selection clipboard -t $DATA_TYPE
+fi
+

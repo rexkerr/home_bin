@@ -40,6 +40,12 @@ cdbr() {
     local CMAKEROOT="./"
 
     while [ ! -f "$CMAKEROOT/CMakeCache.txt" ] && [ ! -f "$CMAKEROOT/build.ninja" ]; do
+        if [ -d "$CMAKEROOT/.git" ]; then
+            echo Found .git folder, selecting sibling debug folder
+            CMAKEROOT+="../debug"
+            continue
+        fi
+
         CMAKEROOT+="../"
 
         if [ "$(readlink -f "$CMAKEROOT")" == "/" ]; then

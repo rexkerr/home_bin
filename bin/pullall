@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-for dir in `find . -iname .git -type d`; do pushd `dirname $dir`;git pull --ff-only;popd > /dev/null; done
+for dir in `find . -iname .git -type d`; do pushd `dirname $dir`;git pull --prune --all --ff-only;popd > /dev/null; done
 
