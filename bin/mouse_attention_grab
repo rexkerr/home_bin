@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+SIZE=25
+DELAY=.03
+
+for i in {1..10}; do     
+    xdotool mousemove_relative -- $SIZE 0
+    sleep $DELAY
+    xdotool mousemove_relative -- 0 $SIZE
+    sleep $DELAY
+    xdotool mousemove_relative -- -$SIZE 0 
+    sleep $DELAY
+    xdotool mousemove_relative -- 0 -$SIZE
+    sleep $DELAY
+done

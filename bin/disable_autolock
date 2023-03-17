@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+log() {
+    local logfile=$HOME/.disable_autolock.log
+
+    # ensure log file exists for wc (easier than checking)
+    touch $logfile
+
+    # roll old log
+    lines=$(wc -l $logfile | cut -d' ' -f 1)
+
+    if (( lines > 10000 )); then
+        mv $logfile.1 $logfile.2
+        mv $logfile.0 $logfile.1
+        mv $logfile $logfile.0
+    fi
+
+    # now log new text
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] [$$] $1" >> $logfile
+
+}
+
+while [[ true ]]; do 
+    day=$(date +%u)
+
+    if (( day > 5 )); then
+        log "Staying locked for the weekend"
+        xautolock -enable
+    elif ! nmcli device wifi | grep -q TAKE-A-HIKE; then 
+        log "Not on home WiFi, enabling xautolock"
+        xautolock -enable
+    else
+
+        hour=$(date +%H | sed -e "s/^0//")
+
+        if (( hour < 7 || hour > 18 )); then
+            log "Outside of working hours, enabling autolock"
+            xautolock -enable
+        else
+            log "Disabling autolock on home network within work hours"
+            xautolock -disable
+        fi
+
+        if (( hour == 8 )); then
+            # log "Automatically unlocking screen for the work day"
+            # pkill i3lock
+            log "...skipping automatic unlock... currently disabled..."
+        fi
+
+    fi
+
+    log "Sleeping"
+    sleep 15m
+
+ done

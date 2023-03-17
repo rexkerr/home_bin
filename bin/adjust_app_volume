@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+APP=$1
+DELTA=$2
+
+APP_ID=$(pactl list sink-inputs | grep -e "application\.name" -e "Sink\ Input" | grep -B1 $APP | grep Sink | cut -d# -f 2)
+
+pactl set-sink-input-volume $APP_ID $DELTA%
+

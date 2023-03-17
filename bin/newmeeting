@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+pause_notifications
+
+echo -e "-- meeting ID not ready --" | cclip
+pkill zoom
+xdg-open zoommtg://zoom.us/start
+

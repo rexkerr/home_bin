@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+pause_notifications
+
+TESTRUN=echo
+
+TITLE="Zoom/Ring Central Meeting"
+
+if [ -z "$1" ]; then
+    URL=$(zenity --width=400 --title="$TITLE" --text="Meeting ID/URL: " --entry --entry-text="`xclip -o -selection clipboard | grep "ringcentral\|zoom"`" 2>/dev/null)
+else
+    URL=$1
+fi
+
+if [ -z "$URL" ]; then echo "Not starting meeting";exit; fi
+
+if grep -q COMPANY.zoom <<< $URL; then
+    # The incoming URL has a single parameter, but in the "fixed" URL it'll be the second parameter, so change from ? to &
+    URL=${URL/\?/&}
+
+    # And substitute the protocol and path to open zoom directly
+    URL=${URL/https:\/\/COMPANY.zoom.com\/j\//zoommtg://zoom.us/join?action=join&confno=}
+
+    # Start the meeting
+    $TESTRUN xdg-open $URL &
+    exit
+fi
+
+CONF=$(sed -e "s#http.*j/##" <<< $URL)
+
+if [[ "$CONF" =~ ^[0-9]{10,11}$ ]]; then
+    if grep -q zoom <<< $URL; then
+        $TESTRUN xdg-open "zoommtg://zoom.us/join?action=join&confno=$CONF" &
+    else
+        $TESTRUN xdg-open "zoomrc://ringcentral.zoom.us/join?action=join&confno=$CONF" &
+    fi
+else
+    zenity --title "$TITLE" --error --text "Invalid meeting URL/ID provided [$CONF].\n\nThe meeting ID must be 10 or 11 digits long." 2> /dev/null
+fi
+
+

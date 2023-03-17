@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# https://www.thegeekdiary.com/how-to-clear-the-buffer-pagecache-disk-cache-under-linux/#:~:text=Writing%20to%20%2Fproc%2Fsys%2F,this%20should%20not%20be%20necessary.
+#
+sync; echo 3 | sudo tee /proc/sys/vm/drop_caches 

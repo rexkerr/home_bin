@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# Gets rid of the c++ command line in ninja output to avoid killing vim
+# performance w/ a HUGE command line showing how the cpp file was compiled
+nice -n 5 ninja "$@" | tee ~/lastbuildoutput.txt | grep -ve "/usr/bin/c++\|Up-to-date:"

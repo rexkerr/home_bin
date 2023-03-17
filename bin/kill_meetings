@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# gracefully leave the meeting before killing zoom
+i3-msg '[title="Zoom Meeting"] kill' && xdotool search --name "Zoom Meeting" windowactivate key Return
+
+# Kill zoom processes, starting with the launcher so that it cannot leave behind the blank browser window!
+ps -ef | grep zoom | awk '{ print $2 }' | xargs kill
+
+pkill -3 teams
+
+resume_notifications

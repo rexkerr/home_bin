@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+$*
+
+if test $? -eq 0
+then
+        mplayer /usr/share/sounds/sound-icons/trumpet-12.wav &> /dev/null
+else
+        mplayer /home/rexkerr/Downloads/fail-trombone-03.wav &> /dev/null
+fi

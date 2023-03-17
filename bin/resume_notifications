@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+killall -SIGUSR2 dunst
+rm ~/.notifications_paused
+killall -SIGUSR1 i3status

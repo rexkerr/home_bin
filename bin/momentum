@@ -1,0 +1,9 @@
+#/usr/bin/env bash
+
+if [[ "$1" = "c" ]]; then
+    echo "Connecting to MOMENTUM M2 AEBT"
+    echo -e "connect 00:1B:66:A6:58:FD" | bluetoothctl 
+else
+    echo "Disconnecting from  MOMENTUM M2 AEBT"
+    echo -e "disconnect 00:1B:66:A6:58:FD" | bluetoothctl 
+fi

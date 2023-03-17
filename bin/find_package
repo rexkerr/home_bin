@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+apt search $1
+echo
+echo -----------------
+echo
+snap search $1
+echo
+echo -----------------
+echo
+flatpak search $1

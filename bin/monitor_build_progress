@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+watch -t -n1 tail ~/.vim/shellpipe.txt  | grep % | tail -1 | cut -c 1-6

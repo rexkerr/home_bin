@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+pkill disable_autolock;xautolock -enable;xautolock -locknow
+sleep 1
+xset dpms force off;

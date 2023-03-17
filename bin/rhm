@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xinput set-button-map "Logitech Wireless Mouse" 1 2 3

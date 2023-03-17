@@ -9,12 +9,13 @@ case "$1" in
     ;;
   "run")
     input=$(tee)
+    echo $input
     if [ ! -z "$input" ]; then
         if [[ "$input" == "EDIT BOOKMARKS" ]]; then
             gvim $0
             exit
         fi
-        $(sed -e "s/^${input}!//;t;d" "$0")
+        $(sed -e "s/^${input}!//;t;d" "$0") &
     fi
     ;;
   "")
@@ -25,8 +26,18 @@ esac
 exit
 
 __BOOKMARKS__
+# Title!Command
+Devdocs!google-chrome-stable --force-dark-mode --app=https://devdocs.io
 Mail!google-chrome-stable --app=https://outlook.office.com/mail/inbox/
 Calendar!google-chrome-stable --app=https://outlook.office.com/calendar
 DICOM Browser!xdg-open https://dicom.innolitics.com/ciods
-# You can add comments now too
+Restart Slack!prestart slack
+ToggleDark Slack!xdotool search --onlyvisible --limit 1 --class slack windowactivate key ctrl+comma sleep .3 key --repeat 2 Down key Tab key Down key Escape
+Kill Redshift!pkill redshift
+Kill Zoom!pkill zoom
+Kill Meetings!kill_meetings
+Pause Notifications!pause_notifications
+Resume Notifications!resume_notifications
+StartNow!newmeeting
+Pianobar!gnome-terminal -e "pianobar" --hide-menubar
 EDIT BOOKMARKS
