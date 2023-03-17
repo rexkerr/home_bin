@@ -1,0 +1,91 @@
+. ~/bin/useful_bash_functions.sh
+
+aws() {
+    if [ "$VIRTUAL_ENV" != "$HOME/virtualenv/awscli" ]; then
+        echo Activating the python virtualenv...
+        . ~/virtualenv/awscli/bin/activate
+    fi
+    aws $@
+}
+
+cdprojectfolders()
+{
+    local REPO_NAME=<<PROJECT_REPO_NAME>> ######### RKTEMP #########
+    local PROJECT_FOLDER="gitroot"
+    local ENTRIES=$(find ~/$PROJECT_FOLDER -maxdepth 2 -type d -iname $REPO_NAME | sed -e "s/^.*\/$PROJECT_FOLDER\/\|\/$REPO_NAME//g" | grep -i ${2:-".*"})
+
+    local NUMENTRIES=`wc -w <<< "$ENTRIES"`
+
+    if [[ $NUMENTRIES == 0 ]] ; then
+       echo ERROR:  No projects found...
+       return
+    fi
+
+    if [[ $NUMENTRIES == 1 ]] ; then
+       cd ~/$PROJECT_FOLDER/$ENTRIES/$1
+       return
+    fi
+
+    select DIR in $ENTRIES; do 
+        cd ~/$PROJECT_FOLDER/$DIR/$1
+        break; 
+    done
+}
+
+
+proj()
+{
+    cdprojectfolders "<<CODE_FOLDER_NAME>>" $1  ####### RKTEMP ########
+}
+
+projdebug()
+{
+    cdprojectfolders "debug" $1
+}
+
+projdbin()
+{
+    cdprojectfolders "debug/install/bin" $1
+}
+
+projrelease()
+{
+    cdprojectfolders "release" $1
+}
+
+projrbin()
+{
+    cdprojectfolders "release/install/bin" $1
+}
+
+projdyml()
+{
+    cdprojectfolders "debug/ymldata/src/ymldata/Src/data/payloads" $1
+}
+
+projryml()
+{
+    cdprojectfolders "release/ymldata/src/ymldata/Src/data/payloads" $1
+}
+
+projparent()
+{
+    cdprojectfolders "" $1
+}
+
+dutils()
+{
+   cd ~/gitroot/developerutilities/Scripts
+}
+
+
+bcpass()
+{ 
+   htpasswd -nbBC 4 "" $1 | sed -e "s/^://"
+}
+
+cdir()
+{
+   cd $(dirname $1)
+}
+
