@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Script functions for sending push notifications
+#
+
+
+ReadPushNotificationTokens() {
+    PUSHOVER_API_TOKEN_FILE=~/.config/myscripts/pushover_api_token
+    PUSHOVER_API_TOKEN=$([ -e "$PUSHOVER_API_TOKEN_FILE" ] && cat "$PUSHOVER_API_TOKEN_FILE")
+
+    PUSHOVER_USER_TOKEN_FILE=~/.config/myscripts/pushover_user_token
+    PUSHOVER_USER_TOKEN=$([ -e "$PUSHOVER_USER_TOKEN_FILE" ] && cat "$PUSHOVER_USER_TOKEN_FILE")
+}
+
+
+CheckPushNotificationSetup() {
+    ReadPushNotificationTokens
+
+    if [[ -z $PUSHOVER_API_TOKEN ]] || [[ -z $PUSHOVER_USER_TOKEN ]]; then
+        cat << EOF
+ERROR:  Push notifications are not configured correctly...
+
+    You need to configure an account at pushover.net (the phone app is cheap,
+    the free one I used to use no longer exists) and then save your:
+
+         User Key:  $PUSHOVER_USER_TOKEN_FILE
+        API Token:  $PUSHOVER_API_TOKEN_FILE
+EOF
+        return 0
+    fi
+
+    return 1
+}
+
+# PushNotification
+#
+#  Sends a push notification
+# 
+#     Param1:  String containing the message to send (can be HTML formatted)
+#
+#     Param2:  Additional curl options to customize the sending of the message,
+#              e.g.:
+#                 "--form-string sound=falling"
+#
+PushNotification() {
+    CheckPushNotificationSetup && return
+
+    curl -s \
+       --form-string "token=$(cat ~/.config/myscripts/pushover_api_token)" \
+       --form-string "user=$(cat ~/.config/myscripts/pushover_user_token)" \
+       --form-string "message=$1" \
+       $2 \
+       https://api.pushover.net/1/messages.json &>/dev/null
+}
+
